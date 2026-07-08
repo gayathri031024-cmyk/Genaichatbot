@@ -4,10 +4,16 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 load_dotenv()
 
+api_key = os.getenv("GOOGLE_API_KEY")
 
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+if not api_key:
+    st.error("GOOGLE_API_KEY not found!")
+    st.stop()
+
+genai.configure(api_key=api_key)
 
 model = genai.GenerativeModel("gemini-2.5-flash")
+
 # =========================================================
 def generate_response(question):
     try:
