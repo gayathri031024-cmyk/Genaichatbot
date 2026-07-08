@@ -1,37 +1,20 @@
 import streamlit as st
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
+load_dotenv()
 
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
-from langchain_ollama import ChatOllama
 
-# =========================================================
-# Prompt Template
-# =========================================================
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-prompt = ChatPromptTemplate.from_messages(
-    [
-        ("system", "You are a helpful assistant. Answer clearly and concisely."),
-        ("human", "{question}")
-    ]
-)
-
+model = genai.GenerativeModel("gemini-2.5-flash")
 # =========================================================
-# LLM + Chain
-# =========================================================
-def generate_response(question, model_name="mistral", temperature=0.7):
+def generate_response(question):
     try:
-        llm = ChatOllama(
-            model=model_name,
-            temperature=temperature
-        )
-
-        output_parser = StrOutputParser()
-        chain = prompt | llm | output_parser
-
-        return chain.invoke({"question": question})
-
+        response = model.generate_content(question)
+        return response.text
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"Error: {e}"
 
 # =========================================================
 # Streamlit UI
@@ -66,7 +49,7 @@ user_input = st.chat_input("Ask something...")
 
 if user_input:
     st.session_state.messages.append(("user", user_input))
-    response = generate_response(user_input, model_name, temperature)
+    response = generate_response(user_input)
     st.session_state.messages.append(("bot", response))
 
 for role, msg in st.session_state.messages:
