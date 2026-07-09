@@ -1,0 +1,18 @@
+# Virtual environments
+venv/
+venv311/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Streamlit
+.streamlit/
+
+# VS Code
+.vscode/
+
+# Environment variables
+.env
