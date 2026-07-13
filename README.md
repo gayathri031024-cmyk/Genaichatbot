@@ -93,12 +93,6 @@ streamlit run bot.py
 
 ---
 
-## 📷 Screenshots
-
-(Add screenshots here)
-
----
-
 ## 👩‍💻 Author
 
 Gayathri Virabhathini
